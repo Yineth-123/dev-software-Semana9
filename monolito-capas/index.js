@@ -1,12 +1,21 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const port = 5002;
+const studentRoutes = require('./routes/students');
+const courseRoutes = require('./routes/courses');
 
 app.use(express.json());
+app.use((err, req, res, next) => {
+    console.error('❌ ERROR DETECTADO:', err);
+    res.status(500).json({ error: 'Error interno del servidor' });
+});
 
-const studentsRoute = require("./routes/students");
-app.use("/students", studentsRoute);
+// Endpoints de estudiantes
+app.use('/estudiantes', studentRoutes);
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+// Endpoints de cursos
+app.use('/cursos', courseRoutes);
+
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
